@@ -1,10 +1,6 @@
 # artemis-docs
 
 ## Perpetual Protocols
-
-### Questions
-
-* For the `sum_of_sum_of_*` metrics, is this a singular value or time series?
   
 ### General Information
 
@@ -16,7 +12,7 @@
 * Perp Protocol
   * V1 launched on Ethereum mainnet (2020) then XDIA, 12/2020
   * V2 launched on OP, 11/2021
-  * [Optimism contract](https://metadata.perp.exchange/v2/optimism.json)
+  * [Optimism contracts](https://metadata.perp.exchange/v2/optimism.json)
   * [Analytics](https://dune.com/momir/Perpetual-Protocol-v2)
 * GMX
   * V1 launched on Arbitrum and Avalanche late 2021
@@ -24,63 +20,49 @@
   * [Arbitrum contracts](https://gmxio.gitbook.io/gmx/contracts#arbitrum)
   * [Analytics](https://stats.gmx.io/#/)
 
-### Docs
+### Metrics
 
-Below is a list of metrics for each protocol including the contract addresses and important notes.
-
-* `sum_of_sum_of_gas`
+* `sum_of_gas`
   * dYdX
   * Perp Protocol
   * GMX
-* `sum_of_sum_of_dau`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `sum_of_sum_of_txns`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `sum_of_sum_of_percent_of_total_gas`
+* `sum_of_txns`
   * dYdX
   * Perp Protocol
   * GMX
 * `trading_volume`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `insurance_pool`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `fees_generated`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `daily_unique_traders`
-  * [Query](https://app.flipsidecrypto.com/velocity/queries/1c1b39a7-2636-4b64-a0cd-7e300da4ca47)
+  * [Query](https://dune.com/queries/1668657)
   * Definition
-    * `unique_traders` is the number of unique users who enter or exit a perpetual position
-    * Does not include liquidity providers
-  * Schema
-  ```
-  [
-    {
-      day,
-      chain,
-      protocol,
-      unique_traders
-    },
-    ...
-  ]
-  ```
+    * `trading_volume` is the nominal USD volume of traded
   * Protocol notes
     * dYdX
     * Perp Protocol
-      * Counts the distinct `from` address when `open_position` or `close_position` method is called on the clearing house contract
-      * **NOTE:** If a contract makes a delegate call to the clearing house contract the source contract will not be counted (should be in traces, I think)
+      * Sums the `volume_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table if `margin_usd > 0`
     * GMX
-      * Counts the distinct  `from` address when a `swap` event is emitted from the router contract
-      * Does not consider GLP interaction
+      * Sums the volume amount when an `IncreasePosition` or `DecreasePosition` event is emitted from the GMX vault contract    
+* `fees_generated`
+  * [Query](https://dune.com/queries/1668739)
+  * Definition
+    * `fees_generated` is the USD amount generated from trading fees
+  * Protocol notes
+    * dYdX
+    * Perp Protocol
+      * Sums the `fee_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table
+    * GMX
+      * Sums the fee amount when an `IncreasePosition` or `DecreasePosition` event is emitted from the GMX vault contract   
+* `daily_unique_traders`
+  * [Query](https://dune.com/queries/1668423)
+  * Definition
+    * `unique_traders` is the number of unique users who enter, exit, or adjust a perpetual position
+  * Columns
+    * day, chain, protocol, traders
+  * Protocol notes
+    * dYdX
+    * Perp Protocol
+      * Counts the distinct `trader` field from the decoded `perpetual_protocol_v2_optimism.trades` table
+    * GMX
+      * Counts the distinct trader address when an `IncreasePosition` or `DecreasePosition` event is emitted from the GMX vault contract
+      * Since GMX is on multiple chains, it's possible that the same address interacts with both chains on the same day thereby creating duplicate users if the traders for each chain are added together. To handle this, there is a separate count for the global GMX traders where chain equals "All".
 
 
 
