@@ -81,7 +81,7 @@
 
 ### Data Considerations
 
-* All metrics are ordered by `day` in ascending order
+* All tables are ordered by `day` in ascending order
 * The `protocol` and `chain` field are **case sensitive**. For example:
   * Protocols
     * GMX
