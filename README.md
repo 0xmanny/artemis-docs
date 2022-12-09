@@ -22,20 +22,29 @@
 
 ### Metrics
 
-* `sum_of_gas`
-  * dYdX
-  * Perp Protocol
-  * GMX
-* `sum_of_txns`
-  * dYdX
-  * Perp Protocol
-  * GMX
+* `gas_used`
+  * [Query](https://dune.com/queries/1708025)
+  * Definition
+    * `gas_used` is the daily sum of gas consumed for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
+  * Protocol notes
+    * Perp Protocol
+      * Excluded price feeds and vtokens from [this list](https://metadata.perp.exchange/v2/optimism.json)
+    * GMX
+      * Excluded GMX token and Trader Joe pool from [this list](https://gmxio.gitbook.io/gmx/contracts#avalanche)
+* `num_txns`
+  * [Query](https://dune.com/queries/1708028)
+  * Definition
+    * `num_txns` is the daily count of transactions for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
+  * Protocol notes
+    * Perp Protocol
+      * Excluded price feeds and vtokens from [this list](https://metadata.perp.exchange/v2/optimism.json)
+    * GMX
+      * Excluded GMX token and Trader Joe pool from [this list](https://gmxio.gitbook.io/gmx/contracts#avalanche)
 * `trading_volume`
   * [Query](https://dune.com/queries/1668657)
   * Definition
     * `trading_volume` is the nominal USD volume of traded
   * Protocol notes
-    * dYdX
     * Perp Protocol
       * Sums the `volume_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table if `margin_usd > 0`
     * GMX
@@ -45,7 +54,6 @@
   * Definition
     * `fees_generated` is the USD amount generated from trading fees
   * Protocol notes
-    * dYdX
     * Perp Protocol
       * Sums the `fee_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table
     * GMX
@@ -57,7 +65,6 @@
   * Columns
     * day, chain, protocol, traders
   * Protocol notes
-    * dYdX
     * Perp Protocol
       * Counts the distinct `trader` field from the decoded `perpetual_protocol_v2_optimism.trades` table
     * GMX
