@@ -26,6 +26,8 @@
   * [Query](https://dune.com/queries/1708025)
   * Definition
     * `gas_used` is the daily sum of gas consumed for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
+  * Columns
+    * `day`, `chain`, `protocol`, `contract_addr`, `contract_name`, `gas_used` 
   * Protocol notes
     * Perp Protocol
       * Excluded price feeds and vtokens from [this list](https://metadata.perp.exchange/v2/optimism.json)
@@ -35,6 +37,8 @@
   * [Query](https://dune.com/queries/1708028)
   * Definition
     * `num_txns` is the daily count of transactions for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
+  * Columns
+    * `day`, `chain`, `protocol`, `contract_addr`, `contract_name`, `num_txns` 
   * Protocol notes
     * Perp Protocol
       * Excluded price feeds and vtokens from [this list](https://metadata.perp.exchange/v2/optimism.json)
@@ -44,6 +48,8 @@
   * [Query](https://dune.com/queries/1668657)
   * Definition
     * `trading_volume` is the nominal USD volume of traded
+  * Columns
+    * `day`, `chain`, `protocol`, `trading_volume`
   * Protocol notes
     * Perp Protocol
       * Sums the `volume_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table if `margin_usd > 0`
@@ -53,6 +59,8 @@
   * [Query](https://dune.com/queries/1668739)
   * Definition
     * `fees_generated` is the USD amount generated from trading fees
+  * Columns
+    * `day`, `chain`, `protocol`, `fees_generated`
   * Protocol notes
     * Perp Protocol
       * Sums the `fee_usd` column from the decoded `perpetual_protocol_v2_optimism.trades` table
@@ -63,7 +71,7 @@
   * Definition
     * `unique_traders` is the number of unique users who enter, exit, or adjust a perpetual position
   * Columns
-    * day, chain, protocol, traders
+    * `day`, `chain`, `protocol`, `traders`
   * Protocol notes
     * Perp Protocol
       * Counts the distinct `trader` field from the decoded `perpetual_protocol_v2_optimism.trades` table
@@ -71,6 +79,18 @@
       * Counts the distinct trader address when an `IncreasePosition` or `DecreasePosition` event is emitted from the GMX vault contract
       * Since GMX is on multiple chains, it's possible that the same address interacts with both chains on the same day thereby creating duplicate users if the traders for each chain are added together. To handle this, there is a separate count for the global GMX traders where chain equals "All".
 
+### Data Considerations
+
+* All metrics are ordered by `day` in ascending order
+* The `protocol` and `chain` field are **case sensitive**. For example:
+  * Protocols
+    * GMX
+    * Perpetual Protocol
+  * Chains
+    * Arbitrum
+    * Avalanche
+    * Optimism
+* Any contract addresses are **lower case** and thus not checksum compliant
 
 
 
