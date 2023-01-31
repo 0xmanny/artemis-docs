@@ -25,7 +25,7 @@
 * `gas_used`
   * [Query](https://dune.com/queries/1708025)
   * Definition
-    * `gas_used` is the daily sum of gas consumed for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
+    * `gas_used` is the daily sum of gas consumed (in $) for each day and protocols _revelant_ contracts. Note, tokens traded on DEXs are excluded to prevent double counting. Additionally, price feed updates were excluded because they are not a initiated by the main user base.
   * Columns
     * `day`, `chain`, `protocol`, `contract_addr`, `contract_name`, `gas_used` 
   * Protocol notes
