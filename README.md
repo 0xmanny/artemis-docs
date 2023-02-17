@@ -78,6 +78,20 @@
     * GMX
       * Counts the distinct trader address when an `IncreasePosition` or `DecreasePosition` event is emitted from the GMX vault contract
       * Since GMX is on multiple chains, it's possible that the same address interacts with both chains on the same day thereby creating duplicate users if the traders for each chain are added together. To handle this, there is a separate count for the global GMX traders where chain equals "All".
+      
+* `user_groups`
+  * [Query](https://dune.com/queries/2007071)
+  * Definition
+    * `percent_trades_by_user_group` and `percent_volume_by_user_group` show the characteristics of the actors using the given protocol. 
+    * The `user_group` field has values with the following definition:
+      * `<10,000`: Daily trading volume is less than 10,000 USD
+      * `<50,000`: Daily trading volume is between 10,000 and 50,000 USD
+      * `<500,000`: Daily trading volume is between 50,000 and 500,000 USD
+      * `>500,000`: Daily trading volume is greater than 500,000 USD
+  * Columns
+    * `day`, `chain`, `protocol`, `user_group`, `trading_volume`, `num_trades`, `percent_volume_by_user_group`, `percent_trades_by_user_group`
+  * Protocol Notes
+    * Same as trading volume section ⬆️
 
 ### Data Considerations
 
